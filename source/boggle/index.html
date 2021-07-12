@@ -2,18 +2,30 @@
   <head>
     <title>Boggle</title>
     <script src="boggle.js" defer ></script>
+    <link rel="stylesheet" type="text/css" href="../../../../css/formats.css">
     <link rel="stylesheet" type="text/css" href="boggle.css">
   </head>
-  <body id="buttons">
-    <div>
+  <body>
+    <div id="buttons">
       <button id="button4">4×4</button><br>
       <button id="button5">5×5</button><br>
       <button id="button6">6×6</button><br>
       <div id="other-input">
-        <input id="other1" class="small" maxlength="2">×<input id="other1" class="small" maxlength="2"> <button>Use</button>
+        <input id="other1" class="small" maxlength="2">×<input id="other2" class="small" maxlength="2"> <button id="button-other">Use</button>
       </div>
     </div>
     
-    <table id="boggle-table" style="display:none"></table>
+    <div id="game-board" style="display:none">
+      <table>
+        <tr><td><table id="boggle-table"></table></td></tr>
+        <tr><td><table id="boggle-timer">
+          <tr><td id="time-left"></td></tr>
+          <tr><td>
+            <button></button>
+          </td></tr>
+        </table></td></tr>
+      </table>
+      
+    </div>
   </body>
 </html>
