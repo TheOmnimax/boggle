@@ -1,31 +1,75 @@
 <html>
-  <head>
-    <title>Boggle</title>
-    <script src="boggle.js" defer ></script>
-    <link rel="stylesheet" type="text/css" href="../../../../css/formats.css">
-    <link rel="stylesheet" type="text/css" href="boggle.css">
-  </head>
-  <body>
-    <div id="buttons">
-      <button id="button4">4×4</button><br>
-      <button id="button5">5×5</button><br>
-      <button id="button6">6×6</button><br>
-      <div id="other-input">
-        <input id="other1" class="small" maxlength="2">×<input id="other2" class="small" maxlength="2"> <button id="button-other">Use</button>
-      </div>
-    </div>
-    
-    <div id="game-board" style="display:none">
+
+<head>
+  <title>Boggle</title>
+  <script src="boggle.js" defer></script>
+  <link rel="stylesheet" type="text/css" href="../../../../css/formats.css">
+  <link rel="stylesheet" type="text/css" href="boggle.css">
+</head>
+
+<body>
+  <div>
+    <div class="popup" id="popup">
       <table>
-        <tr><td><table id="boggle-table"></table></td></tr>
-        <tr><td><table id="boggle-timer">
-          <tr><td id="time-left"></td></tr>
-          <tr><td>
-            <button></button>
-          </td></tr>
-        </table></td></tr>
+        <tr class="popup-top">
+          <td id="popup-header">Warning</td>
+        </tr>
+        <tr class="popup-bottom">
+          <td>
+            <p id="popup-text">This is a warning</p>
+            <p><button id="close-popup">Close</button></p>
+          </td>
+        </tr>
       </table>
-      
     </div>
-  </body>
+    <table id="game-board">
+      <tr>
+        <td>
+          <table id="boggle-timer">
+            <tr>
+              <td id="time-left">Timer</td>
+            </tr>
+            <tr>
+              <td>
+                Time:
+                <input id="time-input" value="90" maxlength="3" size=5>
+                <button id="set-time">Set</button>
+              </td>
+            </tr>
+            <tr>
+              <td id="warnings"></td>
+            </tr>
+            <tr>
+              <td>
+                <button id="start-button" style="display:none">Start game</button>
+              </td>
+            </tr>
+          </table>
+        </td>
+      <!--End timer and other tools-->
+      <!--Main table-->
+        <td>
+          <!--Start buttons-->
+          <div id="start-buttons">
+            <button id="button4">4×4</button><br>
+            <button id="button5">5×5</button><br>
+            <button id="button6">6×6</button><br>
+            <div id="other-input">
+              <input id="other1" class="small" maxlength="2">×<input id="other2" class="small" maxlength="2"> <button
+                id="button-other">Use</button>
+            </div>
+          </div>
+          <!--Actual boggle table-->
+          <div id="boggle-container" style="display:none">
+            <table id="boggle-table"></table>
+          </div>
+          
+        </td>
+      </tr>
+      <!--End main table-->
+    </table>
+
+  </div>
+</body>
+
 </html>

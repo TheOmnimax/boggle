@@ -5,3 +5,50 @@ input.small {
 button {
   margin: 10px 0 10px 0;
 }
+
+#game-board {
+  margin: auto;
+}
+
+table#boggle-table {
+  border-collapse: collapse;
+}
+
+table#boggle-table td {
+  border: solid black 1px;
+  height: 80px;
+  font-size: 24pt;
+  text-align: center;
+  width: 80px;
+}
+
+.popup {
+  position: absolute;
+  /* display: inline-block; */
+  display: none;
+
+  --width: 400px;
+  left: 50%;
+  margin-left: calc(var(--width) / -2);
+}
+
+.popup table {
+  border-collapse: collapse;
+  border: solid black 1px;
+  width: var(--width);
+}
+
+.popup-top {
+  background-color: #000068;
+  color: white;
+  /* height: 40px; */
+}
+
+.popup-bottom {
+  background-color: white;
+  /* height: 175px; */
+}
+
+.popup td {
+  padding: 10px;
+}
