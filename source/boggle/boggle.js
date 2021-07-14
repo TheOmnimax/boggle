@@ -19,6 +19,9 @@ const popupHeaderContainer = document.querySelector('#popup-header')
 const popupTextContainer = document.querySelector('#popup-text')
 const closePopupButton = document.querySelector('#close-popup')
 
+const wordInput = document.querySelector('#enter-words')
+const findButton = document.querySelector('#find-words')
+
 const availableDice = ['AAEEGN', 'ABBJOO', 'ACHOPS', 'AFFKPS',
 'AOOTTW', 'CIMOTU', 'DEILRX', 'DELRVY',
 'DISTTY', 'EEGHNW', 'EEINSU', 'EHRTVW',
@@ -31,6 +34,9 @@ var gameRunning = false
 var timeStart // The Unix time the timer started
 var startTime // The time remaining when the timer was last puased
 var timeRemaining
+
+var foundWords = {}
+var rejectedWords = {}
 
 button4.onclick = function () {
   createTable(4, 4)
@@ -61,6 +67,7 @@ setTimeButton.onclick = function () {
     setTime()
   }
 }
+findButton.onclick = findWords
 
 setTime()
 setInterval(timer, 1)
@@ -221,9 +228,7 @@ function checkWord(word) {
           return false
         }
       }
-      if(findNextLetter(r, c, word.substr(1 + qAdd), [[r, c]])) {
-        return true
-      }
+      return findNextLetter(r, c, word.substr(1 + qAdd), [[r, c]])
     }
   }
   return false
@@ -261,10 +266,37 @@ function checkWord(word) {
 
   function findNextLetter(row, col, remaining, usedCoord) {
     if (remaining === '') {
-      return true
+      return usedCoord
     }
-  
-    if (checkLetter(row - 1, col - 1, remaining, usedCoord)) {
+    
+    let checkReturn
+
+    checkReturn = checkLetter(row - 1, col - 1, remaining, usedCoord)
+    if (checkReturn !== false) return checkReturn
+
+    checkReturn = checkLetter(row - 1, col, remaining, usedCoord)
+    if (checkReturn !== false) return checkReturn
+
+    checkReturn = checkLetter(row - 1, col + 1, remaining, usedCoord)
+    if (checkReturn !== false) return checkReturn
+
+    checkReturn = checkLetter(row, col - 1, remaining, usedCoord)
+    if (checkReturn !== false) return checkReturn
+
+    checkReturn = checkLetter(row, col + 1, remaining, usedCoord)
+    if (checkReturn !== false) return checkReturn
+
+    checkReturn = checkLetter(row + 1, col - 1, remaining, usedCoord)
+    if (checkReturn !== false) return checkReturn
+
+    checkReturn = checkLetter(row + 1, col, remaining, usedCoord)
+    if (checkReturn !== false) return checkReturn
+
+    checkReturn = checkLetter(row + 1, col + 1, remaining, usedCoord)
+    if (checkReturn !== false) return checkReturn
+
+    
+    /*if (checkLetter(row - 1, col - 1, remaining, usedCoord)) {
       return true
     }
     if (checkLetter(row - 1, col, remaining, usedCoord)) {
@@ -287,11 +319,19 @@ function checkWord(word) {
     }
     if (checkLetter(row + 1, col + 1, remaining, usedCoord)) {
       return true
-    }
+    }*/
     return false
   }
-
 }
+
+function findWords () {
+  let rawWordData = wordInput.value
+  let wordList = rawWordData.split(/[, ]+/g)
+  for (let word of wordList) {
+
+  }
+}
+
 
 // Should update later for more nested, but not needed for this project
 Array.prototype.nestedIncludes = function (checkArray) {
@@ -316,3 +356,4 @@ Array.prototype.nestedIncludes = function (checkArray) {
     return false
   }
 }
+
