@@ -31,9 +31,11 @@ const availableDice = ['AAEEGN', 'ABBJOO', 'ACHOPS', 'AFFKPS',
   'EIOSST', 'ELRTTY', 'HIMNQU', 'HLNNRZ'] // https://stanford.edu/class/archive/cs/cs106x/cs106x.1132/handouts/17-Assignment-3-Boggle.pdf
 
 var wordDict = {}
+var wordList
 $.get("word_list.txt", function (txt) {
   // Get an array of all the words
   var words = txt.split(',');
+  wordList = txt
 
   // And add them as properties to the dictionary lookup
   // This will allow for fast lookups later
@@ -43,7 +45,7 @@ $.get("word_list.txt", function (txt) {
 
   // The game would start after the dictionary was loaded
   // startGame();
-});
+})
 
 var tableData = {}
 var letterTable = [[]]
@@ -381,6 +383,10 @@ function checkWordExists(word) {
   } else {
     return false
   }
+}
+
+function findAllWords() {
+  wordFinder(letterTable, wordDict, wordList)
 }
 
 
