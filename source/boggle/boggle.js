@@ -192,7 +192,7 @@ function hideLetters() {
   var numCells = allCells.length
   for (var c = 0; c < numCells; c++) {
     let cell = allCells[c]
-    cell.innerHTML = '⬤'
+    cell.innerHTML = '&#11044;'
   }
 }
 
