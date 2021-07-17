@@ -386,7 +386,14 @@ function checkWordExists(word) {
 }
 
 function findAllWords() {
-  wordFinder(letterTable, wordDict, wordList)
+  // letterTable = [
+  //   ['V', 'R', 'T', 'T'],
+  //   ['E', 'E', 'U', 'S'],
+  //   ['T', 'N', 'T', 'I'],
+  //   ['A', 'W', 'A', 'D']
+  // ]
+  // showLetters()
+  return wordFinder(letterTable, wordDict, wordList)
 }
 
 

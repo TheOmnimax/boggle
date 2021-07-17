@@ -1,5 +1,5 @@
 function wordFinder(lTable, wordDict, wordList) {
-  var allWords = []
+  var allWords = {}
 
   let numRows = lTable.length
   let numCols
@@ -8,23 +8,20 @@ function wordFinder(lTable, wordDict, wordList) {
     numCols = row.length
     for (let c = 0; c < numCols; c++) {
       let startLetter = row[c]
-      console.log('Start letter:', startLetter)
       checkNextLetter(r, c, startLetter, [])
     }
   }
-  console.log(allWords)
   return allWords
 
   function checkNextLetter(r, c, builtWord, usedCoord) {
+    usedCoord = usedCoord.slice(0, builtWord.length) // For some reason, "usedCoord" keeps getting built on, instead of resetting after a "return". This works for now, but I'd like a better solution in the future
     if(usedCoord.nestedIncludes([r, c])) {
       return
     }
     usedCoord.push([r, c])
     builtWord = builtWord.toLowerCase()
-    // console.log('Built so far:', builtWord)
     if (wordDict[builtWord]) {
-      allWords.push(builtWord)
-      console.log('Word found:', builtWord)
+      allWords[builtWord] = usedCoord
     } else if (!wordList.includes(builtWord)) {
       return
     }
@@ -40,7 +37,6 @@ function wordFinder(lTable, wordDict, wordList) {
       newC = c - 1
       if (c > 0) {
         nextLetter = lTable[newR][newC]
-        // console.log('Next letter:', nextLetter)
         checkNextLetter(newR, newC, builtWord + nextLetter,usedCoord)
       }
 
