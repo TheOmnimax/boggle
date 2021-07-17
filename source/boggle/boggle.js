@@ -19,13 +19,31 @@ const popupHeaderContainer = document.querySelector('#popup-header')
 const popupTextContainer = document.querySelector('#popup-text')
 const closePopupButton = document.querySelector('#close-popup')
 
+const foundContainer = document.querySelector('#found-list')
+const rejectedContainer = document.querySelector('#rejected-list')
+
 const wordInput = document.querySelector('#enter-words')
 const findButton = document.querySelector('#find-words')
 
 const availableDice = ['AAEEGN', 'ABBJOO', 'ACHOPS', 'AFFKPS',
-'AOOTTW', 'CIMOTU', 'DEILRX', 'DELRVY',
-'DISTTY', 'EEGHNW', 'EEINSU', 'EHRTVW',
-'EIOSST', 'ELRTTY', 'HIMNQU', 'HLNNRZ'] // https://stanford.edu/class/archive/cs/cs106x/cs106x.1132/handouts/17-Assignment-3-Boggle.pdf
+  'AOOTTW', 'CIMOTU', 'DEILRX', 'DELRVY',
+  'DISTTY', 'EEGHNW', 'EEINSU', 'EHRTVW',
+  'EIOSST', 'ELRTTY', 'HIMNQU', 'HLNNRZ'] // https://stanford.edu/class/archive/cs/cs106x/cs106x.1132/handouts/17-Assignment-3-Boggle.pdf
+
+var wordDict = {}
+$.get("word_list.txt", function (txt) {
+  // Get an array of all the words
+  var words = txt.split(',');
+
+  // And add them as properties to the dictionary lookup
+  // This will allow for fast lookups later
+  for (var i = 0; i < words.length; i++) {
+    wordDict[words[i]] = true;
+  }
+
+  // The game would start after the dictionary was loaded
+  // startGame();
+});
 
 var tableData = {}
 var letterTable = [[]]
@@ -57,11 +75,11 @@ buttonOther.onclick = function () {
   if (!isNaN(val2) && !isNaN(val2)) {
     createTable(parseInt(val1), parseInt(val2))
   }
-  
+
 }
 startButton.onclick = startPauseGame
 setTimeButton.onclick = function () {
-  if(gameRunning) {
+  if (gameRunning) {
     showPopup('Cannot set time while timer is running.')
   } else {
     setTime()
@@ -72,7 +90,7 @@ findButton.onclick = findWords
 setTime()
 setInterval(timer, 1)
 
-function setTime () {
+function setTime() {
   timeRemaining = timeInput.value
   timeLeftContainer.innerHTML = timeRemaining
   startTime = timeRemaining * 1000
@@ -123,7 +141,7 @@ function createTable(width, height) {
   tableData.letters = letters
 
   var boxNum = 0
-  for (let h = 0; h< height; h++) {
+  for (let h = 0; h < height; h++) {
     let rowHtml = '<tr>\n'
     let letterRow = []
     for (let w = 0; w < width; w++) {
@@ -144,7 +162,7 @@ function runGame() {
   gameRunning = true
 }
 
-function startPauseGame () {
+function startPauseGame() {
   if (gameRunning) {
     gameRunning = false
     startTime = timeRemaining
@@ -158,7 +176,7 @@ function startPauseGame () {
   }
 }
 
-function showLetters () {
+function showLetters() {
   var allCells = document.querySelectorAll('.table-cell')
   var letters = tableData.letters
   var numLetters = letters.length
@@ -193,11 +211,11 @@ function timer() {
   }
 }
 
-function closePopup () {
+function closePopup() {
   popupModule.style.display = 'none'
 }
 
-function showPopup(popupText, header='Warning', ...doFunctions) {
+function showPopup(popupText, header = 'Warning', ...doFunctions) {
   popupModule.style.display = 'inline-block'
   popupTextContainer.innerHTML = popupText
   popupHeaderContainer.innerHTML = header
@@ -207,28 +225,33 @@ function showPopup(popupText, header='Warning', ...doFunctions) {
     }
     closePopup()
   }
-  
+
 }
 
 function checkWord(word) {
   word = word.toUpperCase()
   var startLetter = word[0]
-  var numRows = letterTable.length
-  
+  let qAdd = 0
+  if (startLetter === 'Q') {
+    if (word[1] === 'U') {
+      startLetter = 'Qu'
+      qAdd = 1
+    } else {
+      return false
+    }
+  }
+  let numRows = tableData.height
+  let numCols = tableData.width
 
   for (let r = 0; r < numRows; r++) {
-    let row = letterTable[r]
-    let c = row.indexOf(startLetter)
-    let qAdd = 0
-    if (c !== -1) {
-      if (startLetter === 'Q') {
-        if (word[1] === 'U') {
-          qAdd = 1
-        } else {
-          return false
+    for (let c = 0; c < numCols; c++) {
+      let workingLetter = letterTable[r][c]
+      if (workingLetter === startLetter) {
+        let foundSet = findNextLetter(r, c, word.substr(1 + qAdd), [[r, c]])
+        if (foundSet !== false) {
+          return foundSet
         }
       }
-      return findNextLetter(r, c, word.substr(1 + qAdd), [[r, c]])
     }
   }
   return false
@@ -268,7 +291,7 @@ function checkWord(word) {
     if (remaining === '') {
       return usedCoord
     }
-    
+
     let checkReturn
 
     checkReturn = checkLetter(row - 1, col - 1, remaining, usedCoord)
@@ -295,7 +318,7 @@ function checkWord(word) {
     checkReturn = checkLetter(row + 1, col + 1, remaining, usedCoord)
     if (checkReturn !== false) return checkReturn
 
-    
+
     /*if (checkLetter(row - 1, col - 1, remaining, usedCoord)) {
       return true
     }
@@ -324,11 +347,39 @@ function checkWord(word) {
   }
 }
 
-function findWords () {
+function createLbList(obj) {
+  return Object.entries(obj).map(x => String(x[0]) + ': ' + String(x[1])).join('<br>')
+}
+
+function findWords() { // Called by button
   let rawWordData = wordInput.value
   let wordList = rawWordData.split(/[, ]+/g)
   for (let word of wordList) {
+    let coord = checkWord(word)
+    if (coord === false) {
+      if (!(word in rejectedWords)) {
+        rejectedWords[word] = 'Not found'
+      }
+    } else if (!checkWordExists(word)) {
+      if (!(word in rejectedWords)) {
+        rejectedWords[word] = 'Does not exist'
+      }
+    } else {
+      if (!(word in foundWords)) {
+        foundWords[word] = coord
+      }
+    }
+  }
 
+  foundContainer.innerHTML = createLbList(foundWords)
+  rejectedContainer.innerHTML = createLbList(rejectedWords)
+}
+
+function checkWordExists(word) {
+  if (wordDict[word]) {
+    return true
+  } else {
+    return false
   }
 }
 
