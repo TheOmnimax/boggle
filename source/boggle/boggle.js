@@ -161,7 +161,7 @@ function getLetters(numLetters) {
   return letters
 }
 
-function createTable(width, height) {
+async function createTable(width, height) {
   console.log(width, height)
   tableData.width = width
   tableData.height = height
@@ -175,24 +175,25 @@ function createTable(width, height) {
 
   var boxNum = 0
   for (let h = 0; h < height; h++) {
-    let rowHtml = '<tr>\n'
+    let rowElement = document.createElement('tr')
+
     let letterRow = []
     for (let w = 0; w < width; w++) {
-      rowHtml += '<td id="' + boxNum.toString() + '" class="table-cell">&#11044;</td>\n'
+      let cellElement = document.createElement('td')
+      cellElement.setAttribute('id', boxNum.toString())
+      cellElement.classList.add('table-cell')
+      cellElement.appendChild(document.createTextNode(String.fromCharCode(11044)))
+      rowElement.appendChild(cellElement)
       letterRow[w] = letters[boxNum]
       boxNum++
     }
-    rowHtml += '</tr>\n'
-    boggleTable.innerHTML += rowHtml
+    boggleTable.appendChild(rowElement)
+    console.log('Appended')
     letterTable[h] = letterRow
   }
   startButton.style.display = 'inline'
-}
-
-function runGame() {
-  showLetters()
-  timeStart = Date.now()
-  gameRunning = true
+  console.log(boggleTable.innerHTML)
+  await findAllWords()
 }
 
 function startPauseGame() {
@@ -249,8 +250,6 @@ function timer () {
 
 
       showPopup('Time\'s up, pencils down! Click the button to check your answers.', 'Time\'s up!', button1)
-      
-      findAllWords() // Will need to make ajax
     }
   }
 }
@@ -444,6 +443,7 @@ function checkWordExists(word) {
 }
 
 function findAllWords() {
+  console.log('Starting word finder')
   // letterTable = [
   //   ['V', 'R', 'T', 'T'],
   //   ['E', 'E', 'U', 'S'],
@@ -452,6 +452,7 @@ function findAllWords() {
   // ]
   // showLetters()
   allWords = wordFinder(letterTable, wordDict, wordList)
+  console.log(allWords)
   return allWords
 }
 

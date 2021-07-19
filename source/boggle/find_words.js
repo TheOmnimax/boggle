@@ -1,4 +1,10 @@
-function wordFinder(lTable, wordDict, wordList) {
+function wordFinderD (a, b, c) {
+  for (let i = 0; i < 3000; i++) {
+    myVar = true
+    console.log('Complete')}
+}
+
+function wordFinder (lTable, wordDict, wordList) {
   var allWords = {}
 
   let numRows = lTable.length
