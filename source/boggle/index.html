@@ -7,6 +7,7 @@
   <script src="find_words.js" defer></script>
   <link rel="stylesheet" type="text/css" href="../../../../css/formats.css">
   <link rel="stylesheet" type="text/css" href="boggle.css">
+  <link rel="stylesheet" type="text/css" href="auto_grow.css">
 </head>
 
 <body>
@@ -19,14 +20,14 @@
         <tr class="popup-bottom">
           <td>
             <p id="popup-text">This is a warning</p>
-            <p><button id="close-popup">Close</button></p>
+            <p id="popup-buttons"></p>
           </td>
         </tr>
       </table>
     </div>
     <table id="game-board">
       <tr>
-        <td>
+        <td class="board-col">
           <table id="boggle-timer">
             <tr>
               <td id="time-left">Timer</td>
@@ -50,15 +51,15 @@
         </td>
         <!--End timer and other tools-->
         <!--Main table-->
-        <td>
+        <td class="board-col">
           <!--Start buttons-->
           <div id="start-buttons">
             <button id="button4">4&#215;4</button><br>
             <button id="button5">5&#215;5</button><br>
             <button id="button6">6&#215;6</button><br>
             <div id="other-input">
-              <input id="other1" class="small" maxlength="2">&#215;<input id="other2" class="small" maxlength="2"> <button
-                id="button-other">Use</button>
+              <input id="other1" class="small" maxlength="2">&#215;<input id="other2" class="small" maxlength="2">
+              <button id="button-other">Use</button>
             </div>
           </div>
           <!--Actual boggle table-->
@@ -68,16 +69,27 @@
 
         </td>
         <!--End main table-->
-        <td>
+        <td class="board-col">
           <table id="words-used">
+            <colgroup>
+              <col>
+              <col>
+              <col>
+            </colgroup>
             <tr id="word-lists">
               <td id="words-found">
                 <h3>Words found</h3>
                 <div id="found-list"></div>
               </td>
-              <td id="words-rejected">
+              <td id="words-rejected" rowspan="2">
                 <h3>Word rejected</h3>
                 <div id="rejected-list"></div>
+              </td>
+              <td id="words-all" rowspan="2">
+                <h3>All words</h3>
+                <div id="all-list">
+                  <button id="show-all">Show all</button>
+                </div>
               </td>
             </tr>
             <tr>
@@ -85,10 +97,11 @@
                 <p>
                   Enter a list of words:
                 </p>
-                <p>
-                  <input id="enter-words"><br>
-                  <button id="find-words">Find</button>
-                </p>
+                  <div class="grow-wrap">
+                    <textarea name="text" class="autogrow" id="enter-words" onInput="this.parentNode.dataset.replicatedValue = this.value"></textarea>
+                  </div>
+                  <br>
+                  <input type="submit" id="find-words" value="Find">
               </td>
             </tr>
           </table>
@@ -97,7 +110,8 @@
     </table>
 
   </div>
-  <div> Word list from <a href="https://www.wordgamedictionary.com/twl06/download/twl06.txt" target="_blank">Word Game Dictionary</a></div>
+  <div> Word list from <a href="https://www.wordgamedictionary.com/twl06/download/twl06.txt" target="_blank">Word Game
+      Dictionary</a></div>
 </body>
 
 </html>

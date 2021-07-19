@@ -1,5 +1,5 @@
-input.small {
-  width: 30px;
+table {
+  border-collapse: collapse;
 }
 
 button {
@@ -10,8 +10,13 @@ button {
   margin: auto;
 }
 
-table#boggle-table {
-  border-collapse: collapse;
+table#game-board td:not(.table-cell) {
+  padding: 8px;
+  vertical-align: top;
+}
+
+input.small {
+  width: 30px;
 }
 
 table#boggle-table td {
@@ -21,6 +26,23 @@ table#boggle-table td {
   text-align: center;
   width: 80px;
 }
+
+/* #words-used {
+  border-collapse: collapse;
+} */
+
+#words-used td {
+  border: solid black 1px;
+}
+
+#words-used col {
+  width: 33%;
+}
+
+/* textarea#enter-words{
+  width: 100%;
+
+} */
 
 .popup {
   position: absolute;
@@ -33,7 +55,7 @@ table#boggle-table td {
 }
 
 .popup table {
-  border-collapse: collapse;
+  /* border-collapse: collapse; */
   border: solid black 1px;
   width: var(--width);
 }

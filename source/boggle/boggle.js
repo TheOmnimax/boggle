@@ -18,9 +18,11 @@ const popupModule = document.querySelector('#popup')
 const popupHeaderContainer = document.querySelector('#popup-header')
 const popupTextContainer = document.querySelector('#popup-text')
 const closePopupButton = document.querySelector('#close-popup')
+const popupButtonContainer = document.querySelector('#popup-buttons')
 
 const foundContainer = document.querySelector('#found-list')
 const rejectedContainer = document.querySelector('#rejected-list')
+const showAllContainer = document.querySelector('#all-list')
 
 const wordInput = document.querySelector('#enter-words')
 const findButton = document.querySelector('#find-words')
@@ -30,6 +32,7 @@ const availableDice = ['AAEEGN', 'ABBJOO', 'ACHOPS', 'AFFKPS',
   'DISTTY', 'EEGHNW', 'EEINSU', 'EHRTVW',
   'EIOSST', 'ELRTTY', 'HIMNQU', 'HLNNRZ'] // https://stanford.edu/class/archive/cs/cs106x/cs106x.1132/handouts/17-Assignment-3-Boggle.pdf
 
+// https://johnresig.com/blog/dictionary-lookups-in-javascript/
 var wordDict = {}
 var wordList
 $.get("word_list.txt", function (txt) {
@@ -57,6 +60,7 @@ var timeRemaining
 
 var foundWords = {}
 var rejectedWords = {}
+var allWords // Will eventually store all words that could have been used
 
 button4.onclick = function () {
   createTable(4, 4)
@@ -88,6 +92,33 @@ setTimeButton.onclick = function () {
   }
 }
 findButton.onclick = findWords
+document.querySelector('#show-all').onclick = function () {
+  if (allWords == null) {
+    let button1 = getCloseButton(closeText = 'Aw, man!')
+    showPopup('Nice try, but you can\'t show all words until time runs out.', 'No cheating!', button1)
+  } else {
+    let button1 = getCloseButton(closeText = 'No')
+
+    let button2 = document.createElement('button')
+    button2.appendChild(document.createTextNode('Yes'))
+    button2.onclick = function () {
+      closePopup()
+      showAllContainer.innerHTML = Object.keys(allWords).join('<br>')
+    }
+  
+    showPopup('Are you sure you would like to show all possible words on this board?', 'Show all words', [button1, button2])
+  }
+  
+}
+
+wordInput.addEventListener('input', function (e) {
+  let inputType = e.inputType
+  if ((inputType === 'insertLineBreak') || ((e.data == null) && (inputType === 'insertText'))) {
+    wordInput.value = wordInput.value.replace('\n', '')
+    findWords()
+    wordInput.focus()
+  }
+})
 
 setTime()
 setInterval(timer, 1)
@@ -198,7 +229,7 @@ function hideLetters() {
   }
 }
 
-function timer() {
+function timer () {
   if (gameRunning) {
     var timePassed = Date.now() - timeStart
     timeRemaining = startTime - timePassed
@@ -208,26 +239,53 @@ function timer() {
       startButton.style.display = 'None'
       gameRunning = false
       hideLetters()
-      showPopup('Time\'s up, pencils down! Click the button to check your answers.', 'Time\'s up!', showLetters)
+
+      let button1 = document.createElement('button')
+      button1.appendChild(document.createTextNode('Close'))
+      button1.onclick = function () {
+        closePopup()
+        showLetters()
+      }
+
+
+      showPopup('Time\'s up, pencils down! Click the button to check your answers.', 'Time\'s up!', button1)
+      
+      findAllWords() // Will need to make ajax
     }
   }
+}
+
+function getCloseButton(closeText = 'Close') {
+  let closeButton = document.createElement('button')
+  closeButton.appendChild(document.createTextNode(closeText))
+  closeButton.onclick = closePopup
+  return closeButton
 }
 
 function closePopup() {
   popupModule.style.display = 'none'
 }
 
-function showPopup(popupText, header = 'Warning', ...doFunctions) {
-  popupModule.style.display = 'inline-block'
-  popupTextContainer.innerHTML = popupText
-  popupHeaderContainer.innerHTML = header
-  closePopupButton.onclick = function () {
-    for (df of doFunctions) {
-      df()
-    }
-    closePopup()
+function showPopup(popupText, header = 'Warning', buttons = []/* ...doFunctions*/) {
+  if (buttons === []) {
+    let button = document.createElement('button')
+    button.appendChild(document.createTextNode('Close'))
+    button.onclick = closePopup
+    buttons = [button]
   }
 
+  removeAllChildNodes(popupButtonContainer)
+  if (Array.isArray(buttons)) {
+    for (let button of buttons) {
+      popupButtonContainer.appendChild(button)
+    }
+  } else {
+    popupButtonContainer.appendChild(buttons)
+  }
+
+  popupModule.style.display = 'inline-block'
+  popupTextContainer.innerText = popupText
+  popupHeaderContainer.innerText = header
 }
 
 function checkWord(word) {
@@ -393,7 +451,8 @@ function findAllWords() {
   //   ['A', 'W', 'A', 'D']
   // ]
   // showLetters()
-  return wordFinder(letterTable, wordDict, wordList)
+  allWords = wordFinder(letterTable, wordDict, wordList)
+  return allWords
 }
 
 
@@ -421,3 +480,8 @@ Array.prototype.nestedIncludes = function (checkArray) {
   }
 }
 
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+}
