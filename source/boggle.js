@@ -63,13 +63,13 @@ var rejectedWords = {}
 var allWords // Will eventually store all words that could have been used
 
 button4.onclick = function () {
-  createTable(4, 4)
+  startGame(4, 4)
 }
 button5.onclick = function () {
-  createTable(5, 5)
+  startGame(5, 5)
 }
 button6.onclick = function () {
-  createTable(6, 6)
+  startGame(6, 6)
 }
 buttonOther.onclick = function () {
   let val1 = other1.value
@@ -79,7 +79,7 @@ buttonOther.onclick = function () {
   }
 
   if (!isNaN(val2) && !isNaN(val2)) {
-    createTable(parseInt(val1), parseInt(val2))
+    startGame(parseInt(val1), parseInt(val2))
   }
 
 }
@@ -161,7 +161,29 @@ function getLetters(numLetters) {
   return letters
 }
 
-async function createTable(width, height) {
+function startGame(width, height) {
+  console.log('Starting game')
+  createTable(width, height)
+  wf()
+  
+  // allWords = await Promise.resolve(function () {
+  //   console.log('Starting promise')  
+    
+  //   console.log('Promise done')
+  // })
+  
+}
+
+async function wf() {
+  aw = await Promise.resolve(
+    function () {
+      wordFinder(letterTable, wordDict, wordList)
+    }
+  )
+  allWords = aw()
+}
+
+function createTable(width, height) {
   console.log(width, height)
   tableData.width = width
   tableData.height = height
@@ -193,7 +215,6 @@ async function createTable(width, height) {
   }
   startButton.style.display = 'inline'
   console.log(boggleTable.innerHTML)
-  await findAllWords()
 }
 
 function startPauseGame() {
@@ -451,11 +472,9 @@ function findAllWords() {
   //   ['A', 'W', 'A', 'D']
   // ]
   // showLetters()
+  
   allWords = wordFinder(letterTable, wordDict, wordList)
-  console.log(allWords)
-  return allWords
 }
-
 
 // Should update later for more nested, but not needed for this project
 Array.prototype.nestedIncludes = function (checkArray) {
