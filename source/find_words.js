@@ -5,6 +5,7 @@ function wordFinderD (a, b, c) {
 }
 
 function wordFinder (lTable, wordDict, wordList) {
+  console.time('Word finder')
   console.log('Starting word finder...')
   var allWords = {}
 
@@ -19,6 +20,7 @@ function wordFinder (lTable, wordDict, wordList) {
     }
   }
   console.log('Found words')
+  console.timeEnd('Word finder')
   return allWords
 
   function checkNextLetter(r, c, builtWord, usedCoord) {

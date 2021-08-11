@@ -164,27 +164,14 @@ function getLetters(numLetters) {
 function startGame(width, height) {
   console.log('Starting game')
   createTable(width, height)
-  wf()
-  
-  // allWords = await Promise.resolve(function () {
-  //   console.log('Starting promise')  
-    
-  //   console.log('Promise done')
-  // })
-  
-}
-
-async function wf() {
-  aw = await Promise.resolve(
-    function () {
-      wordFinder(letterTable, wordDict, wordList)
-    }
-  )
-  allWords = aw()
+  new Promise((resolve, reject) => {
+    const result = wordFinder(letterTable, wordDict, wordList)
+    resolve(result)
+    allWords = result
+  })
 }
 
 function createTable(width, height) {
-  console.log(width, height)
   tableData.width = width
   tableData.height = height
 
@@ -210,7 +197,6 @@ function createTable(width, height) {
       boxNum++
     }
     boggleTable.appendChild(rowElement)
-    console.log('Appended')
     letterTable[h] = letterRow
   }
   startButton.style.display = 'inline'
@@ -461,19 +447,6 @@ function checkWordExists(word) {
   } else {
     return false
   }
-}
-
-function findAllWords() {
-  console.log('Starting word finder')
-  // letterTable = [
-  //   ['V', 'R', 'T', 'T'],
-  //   ['E', 'E', 'U', 'S'],
-  //   ['T', 'N', 'T', 'I'],
-  //   ['A', 'W', 'A', 'D']
-  // ]
-  // showLetters()
-  
-  allWords = wordFinder(letterTable, wordDict, wordList)
 }
 
 // Should update later for more nested, but not needed for this project
