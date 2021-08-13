@@ -4,6 +4,15 @@ function wordFinderD (a, b, c) {
     console.log('Complete')}
 }
 
+onmessage = function (e) {
+  let receivedData = e.data
+  let lTable = receivedData[0]
+  let wordDict = receivedData[1]
+  let wordList = receivedData[2]
+  let foundWords = wordFinder(lTable, wordDict, wordList)
+  this.postMessage(foundWords)
+}
+
 function wordFinder (lTable, wordDict, wordList) {
   console.time('Word finder')
   console.log('Starting word finder...')
@@ -90,5 +99,29 @@ function wordFinder (lTable, wordDict, wordList) {
         checkNextLetter(newR, newC, builtWord + nextLetter, usedCoord)
       }
     }
+  }
+}
+
+// Should update later for more nested, but not needed for this project
+Array.prototype.nestedIncludes = function (checkArray) {
+  if (typeof checkArray !== 'object') {
+    return false
+  } else {
+    let arrayLen = this.length
+    for (let i = 0; i < arrayLen; i++) {
+      let item = this[i]
+      let itemLen = item.length
+      let isMatch = true
+      for (let l = 0; l < itemLen; l++) {
+        if (item[l] !== checkArray[l]) {
+          isMatch = false
+          break
+        }
+      }
+      if (isMatch) {
+        return true
+      }
+    }
+    return false
   }
 }

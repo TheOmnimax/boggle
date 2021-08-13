@@ -27,6 +27,8 @@ const showAllContainer = document.querySelector('#all-list')
 const wordInput = document.querySelector('#enter-words')
 const findButton = document.querySelector('#find-words')
 
+const wfWorker = new Worker('find_words.js')
+
 const availableDice = ['AAEEGN', 'ABBJOO', 'ACHOPS', 'AFFKPS',
   'AOOTTW', 'CIMOTU', 'DEILRX', 'DELRVY',
   'DISTTY', 'EEGHNW', 'EEINSU', 'EHRTVW',
@@ -120,6 +122,10 @@ wordInput.addEventListener('input', function (e) {
   }
 })
 
+wfWorker.onmessage = function (e) {
+  allWords = e.data
+}
+
 setTime()
 setInterval(timer, 1)
 
@@ -164,11 +170,7 @@ function getLetters(numLetters) {
 function startGame(width, height) {
   console.log('Starting game')
   createTable(width, height)
-  new Promise((resolve, reject) => {
-    const result = wordFinder(letterTable, wordDict, wordList)
-    resolve(result)
-    allWords = result
-  })
+  wfWorker.postMessage([letterTable, wordDict, wordList])
 }
 
 function createTable(width, height) {
@@ -254,8 +256,6 @@ function timer () {
         closePopup()
         showLetters()
       }
-
-
       showPopup('Time\'s up, pencils down! Click the button to check your answers.', 'Time\'s up!', button1)
     }
   }
@@ -383,7 +383,6 @@ function checkWord(word) {
 
     checkReturn = checkLetter(row + 1, col + 1, remaining, usedCoord)
     if (checkReturn !== false) return checkReturn
-
 
     /*if (checkLetter(row - 1, col - 1, remaining, usedCoord)) {
       return true
