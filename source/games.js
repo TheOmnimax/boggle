@@ -28,7 +28,7 @@ class BoardSpace {
   } // End connectSpace
 
   assignPiece(piece) {
-    this.assigned = piece
+    this.name = piece
   }
 }
 

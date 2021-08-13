@@ -1,20 +1,25 @@
 class BoggleBoard extends SquareBoard {
   constructor(width, height) {
     super(width, height)
+  }
+
+  rollDice () {
     this.boggleBag = new BoggleBag(this.numSpaces)
-    let retrievedLetters = this.boggleBag.pourDice()
+    this.letterList = this.boggleBag.pourDice()
     let spaceId = 0
-    for (let r = 0; r < height; r++) {
+    for (let r = 0; r < this.height; r++) {
       let row = []
-      for (let c = 0; c < width; c++) {
-        row[c] = new BoardSpace(spaceId, retrievedLetters[spaceId])
+      for (let c = 0; c < this.width; c++) {
+        row[c] = new BoardSpace(spaceId, this.letterList[spaceId])
         spaceId++
       }
       this.board[r] = row
     }
+  }
 
-    for (let r = 0; r < height; r++) {
-      for (let c = 0; c < width; c++) {
+  connectSpaces () {
+    for (let r = 0; r < this.height; r++) {
+      for (let c = 0; c < this.width; c++) {
         let boardSpace = this.board[r][c]
         if (r > 0) {
           if (c > 0) {
@@ -44,14 +49,26 @@ class BoggleBoard extends SquareBoard {
         }
       } // End cycle through each cell in row
     } // End cycle through each row
-  } // End constructor
+  } // End connectSpaces
+
+  findAllWords (wordDict, wordList) {
+    this.allWords = []
+    const wfWorker = new Worker('find_words.js')
+    wfWorker.postMessage([this.board, wordDict, wordList])
+    let scope = this
+
+    wfWorker.onmessage = function (e) {
+      scope.allWords = e.data
+
+    }
+  }
 }
 
 class BoggleDice extends Dice { // Single die for Boggle
   static boggleDice = ['AAEEGN', 'ABBJOO', 'ACHOPS', 'AFFKPS',
     'AOOTTW', 'CIMOTU', 'DEILRX', 'DELRVY',
     'DISTTY', 'EEGHNW', 'EEINSU', 'EHRTVW',
-    'EIOSST', 'ELRTTY', 'HIMNQU', 'HLNNRZ']
+    'EIOSST', 'ELRTTY', 'HIMNQU', 'HLNNRZ'] // https://stanford.edu/class/archive/cs/cs106x/cs106x.1132/handouts/17-Assignment-3-Boggle.pdf
 
   constructor(diceNum) {
     super(BoggleDice.boggleDice[diceNum])

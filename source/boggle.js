@@ -27,7 +27,7 @@ const showAllContainer = document.querySelector('#all-list')
 const wordInput = document.querySelector('#enter-words')
 const findButton = document.querySelector('#find-words')
 
-const wfWorker = new Worker('find_words.js')
+var boggleBoard
 
 const availableDice = ['AAEEGN', 'ABBJOO', 'ACHOPS', 'AFFKPS',
   'AOOTTW', 'CIMOTU', 'DEILRX', 'DELRVY',
@@ -40,7 +40,7 @@ var wordList
 $.get("word_list.txt", function (txt) {
   // Get an array of all the words
   var words = txt.split(',');
-  wordList = txt
+  wordList = ',' + txt
 
   // And add them as properties to the dictionary lookup
   // This will allow for fast lookups later
@@ -62,7 +62,7 @@ var timeRemaining
 
 var foundWords = {}
 var rejectedWords = {}
-var allWords // Will eventually store all words that could have been used
+var allWords = [] // Will eventually store all words that could have been used
 
 button4.onclick = function () {
   startGame(4, 4)
@@ -95,9 +95,9 @@ setTimeButton.onclick = function () {
 }
 findButton.onclick = findWords
 document.querySelector('#show-all').onclick = function () {
-  if (allWords == null) {
-    let button1 = getCloseButton(closeText = 'Aw, man!')
-    showPopup('Nice try, but you can\'t show all words until time runs out.', 'No cheating!', button1)
+  if (boggleBoard.allWords.length === 0) {
+    let button1 = getCloseButton(closeText = 'Oh, alright.')
+    showPopup('The word list is still being built. Please wait a few more seconds.', 'Still working', button1)
   } else {
     let button1 = getCloseButton(closeText = 'No')
 
@@ -105,7 +105,7 @@ document.querySelector('#show-all').onclick = function () {
     button2.appendChild(document.createTextNode('Yes'))
     button2.onclick = function () {
       closePopup()
-      showAllContainer.innerHTML = Object.keys(allWords).join('<br>')
+      showAllContainer.innerHTML = boggleBoard.allWords.join('<br>')
     }
   
     showPopup('Are you sure you would like to show all possible words on this board?', 'Show all words', [button1, button2])
@@ -121,10 +121,6 @@ wordInput.addEventListener('input', function (e) {
     wordInput.focus()
   }
 })
-
-wfWorker.onmessage = function (e) {
-  allWords = e.data
-}
 
 setTime()
 setInterval(timer, 1)
@@ -168,12 +164,16 @@ function getLetters(numLetters) {
 }
 
 function startGame(width, height) {
+  boggleBoard = new BoggleBoard(width, height)
   console.log('Starting game')
   createTable(width, height)
-  wfWorker.postMessage([letterTable, wordDict, wordList])
 }
 
 function createTable(width, height) {
+  boggleBoard.rollDice()
+  boggleBoard.connectSpaces()
+  boggleBoard.findAllWords(wordDict, wordList)
+
   tableData.width = width
   tableData.height = height
 
@@ -221,7 +221,7 @@ function startPauseGame() {
 
 function showLetters() {
   var allCells = document.querySelectorAll('.table-cell')
-  var letters = tableData.letters
+  var letters = boggleBoard.letterList
   var numLetters = letters.length
   for (var c = 0; c < numLetters; c++) {
     let letter = letters[c]
