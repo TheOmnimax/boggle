@@ -153,7 +153,6 @@ function getLetters(numLetters) {
   }
   var otherDice = shuffleDice().slice(0, lettersNeeded)
   dice = dice.concat(otherDice)
-  // console.log(dice)
   for (cube of dice) {
     var rand6 = Math.floor(Math.random() * 6)
     var addLetter = cube[rand6]
@@ -165,7 +164,6 @@ function getLetters(numLetters) {
 
 function startGame(width, height) {
   boggleBoard = new BoggleBoard(width, height)
-  console.log('Starting game')
   createTable(width, height)
 }
 
@@ -202,7 +200,6 @@ function createTable(width, height) {
     letterTable[h] = letterRow
   }
   startButton.style.display = 'inline'
-  console.log(boggleTable.innerHTML)
 }
 
 function startPauseGame() {
