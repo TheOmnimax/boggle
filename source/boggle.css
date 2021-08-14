@@ -74,8 +74,8 @@ table#boggle-table td {
 /* RIGHT COLUMN, RESULTS COLUMN */
 
 #results-col { /* Right column */
+  word-break: break-all;
   width: 300px;
-
 }
 
 #words-used > tbody > tr > td {
