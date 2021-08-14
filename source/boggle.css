@@ -2,8 +2,17 @@ table {
   border-collapse: collapse;
 }
 
-button {
+button{
+  border: solid #000000 1px;
+  border-radius: 6px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  /* font-family: Georgia; */
+  font-size: 12pt;
   margin: 10px 0 10px 0;
+  outline: none;
+  padding: 3px 10px;
+  text-align: center;
 }
 
 #game-board {
@@ -15,9 +24,42 @@ table#game-board td:not(.table-cell) {
   vertical-align: top;
 }
 
+/* ============================== */
+
+/* LEFT COLUMN, TIMER COLUMN */
+
+#timer-col { /* Left column */
+  width: 125px;
+
+}
+
+/* ============================== */
+
+/* MIDDLE COLUMN, MAIN BOARD */
+
+#board-col { /* Middle column */
+  /* width: 500px; */
+}
+
+/* Start buttons */
+
+#button4 {
+  background-color: #69b87e;
+}
+
+#button5 {
+  background-color: #f5f1ab;
+}
+
+#button6 {
+  background-color: #e69191;
+}
+
 input.small {
   width: 30px;
 }
+
+/* Boggle board */
 
 table#boggle-table td {
   border: solid black 1px;
@@ -27,22 +69,41 @@ table#boggle-table td {
   width: 80px;
 }
 
-/* #words-used {
-  border-collapse: collapse;
-} */
+/* ============================== */
 
-#words-used td {
+/* RIGHT COLUMN, RESULTS COLUMN */
+
+#results-col { /* Right column */
+  width: 300px;
+
+}
+
+#words-used > tbody > tr > td {
+  max-width: 100px;
+}
+
+#words-used td:not(#word-entry) {
   border: solid black 1px;
 }
 
+
 #words-used col {
   width: 33%;
+}
+
+#words-found, #words-rejected {
+  height: 100px;
 }
 
 /* textarea#enter-words{
   width: 100%;
 
 } */
+
+
+
+
+/* POPUP */
 
 .popup {
   position: absolute;

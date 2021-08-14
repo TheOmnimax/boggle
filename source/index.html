@@ -27,87 +27,95 @@
       </table>
     </div>
     <table id="game-board">
-      <tr>
-        <td class="board-col">
-          <table id="boggle-timer">
-            <tr>
-              <td id="time-left">Timer</td>
-            </tr>
-            <tr>
-              <td>
-                Time:
-                <input id="time-input" value="90" maxlength="3" size=5>
-                <button id="set-time">Set</button>
-              </td>
-            </tr>
-            <tr>
-              <td id="warnings"></td>
-            </tr>
-            <tr>
-              <td>
-                <button id="start-button" style="display:none">Start game</button>
-              </td>
-            </tr>
-          </table>
-        </td>
-        <!--End timer and other tools-->
-        <!--Main table-->
-        <td class="board-col">
-          <!--Start buttons-->
-          <div id="start-buttons">
-            <button id="button4">4&#215;4</button><br>
-            <button id="button5">5&#215;5</button><br>
-            <button id="button6">6&#215;6</button><br>
-            <div id="other-input">
-              <input id="other1" class="small" maxlength="2">&#215;<input id="other2" class="small" maxlength="2">
-              <button id="button-other">Use</button>
+      <colgroup>
+        <col>
+        <col>
+        <col>
+      </colgroup>
+      <tbody>
+        <tr>
+          <td class="board-col" id="timer-col">
+            <table>
+              <tr>
+                <td id="time-left">Timer</td>
+              </tr>
+              <tr>
+                <td>
+                  Time:
+                  <input id="time-input" value="90" maxlength="3" size=5>
+                  <button id="set-time">Set</button>
+                </td>
+              </tr>
+              <tr>
+                <td id="warnings"></td>
+              </tr>
+              <tr>
+                <td>
+                  <button id="start-button" style="display:none">Start game</button>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <!--End timer and other tools-->
+          <!--Main table-->
+          <td class="board-col" id="board-col">
+            <!--Start buttons-->
+            <div id="start-buttons">
+              <button id="button4">4&#215;4</button><br>
+              <button id="button5">5&#215;5</button><br>
+              <button id="button6">6&#215;6</button><br>
+              <div id="other-input">
+                <input id="other1" class="small" maxlength="2">&#215;<input id="other2" class="small" maxlength="2">
+                <button id="button-other">Use</button>
+              </div>
             </div>
-          </div>
-          <!--Actual boggle table-->
-          <div id="boggle-container" style="display:none">
-            <table id="boggle-table"></table>
-          </div>
+            <!--Actual boggle table-->
+            <div id="boggle-container" style="display:none">
+              <table id="boggle-table"></table>
+            </div>
 
-        </td>
-        <!--End main table-->
-        <td class="board-col">
-          <table id="words-used">
-            <colgroup>
-              <col>
-              <col>
-              <col>
-            </colgroup>
-            <tr id="word-lists">
-              <td id="words-found">
-                <h3>Words found</h3>
-                <div id="found-list"></div>
-              </td>
-              <td id="words-rejected">
-                <h3>Word rejected</h3>
-                <div id="rejected-list"></div>
-              </td>
-              <td id="words-all" rowspan="2">
-                <h3>All words</h3>
-                <div id="all-list">
-                  <button id="show-all">Show all</button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <p>
-                  Enter a list of words:
-                </p>
+          </td>
+          <!--End main table-->
+          <td class="board-col" id="results-col">
+            <table id="words-used">
+              <colgroup>
+                <col>
+                <col>
+                <col>
+              </colgroup>
+              <tr id="word-lists">
+                <td id="words-found">
+                  <h3>Words found</h3>
+                  <div id="found-list"></div>
+                </td>
+                <td id="words-rejected">
+                  <h3>Word rejected</h3>
+                  <div id="rejected-list"></div>
+                </td>
+                <td id="words-all" rowspan="2">
+                  <h3>All words</h3>
+                  <div id="all-list">
+                    <button id="show-all">Show all</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td id="word-entry" colspan="2">
+                  <p>
+                    Enter a list of words:
+                  </p>
                   <div class="grow-wrap">
-                    <textarea name="text" class="autogrow" id="enter-words" onInput="this.parentNode.dataset.replicatedValue = this.value"></textarea>
+                    <textarea name="text" class="autogrow" id="enter-words"
+                      onInput="this.parentNode.dataset.replicatedValue = this.value"></textarea>
                   </div>
                   <br>
                   <input type="submit" id="find-words" value="Find">
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
   </div>
