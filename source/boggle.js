@@ -311,7 +311,7 @@ function checkWord(word) {
 }
 
 function createLbList(obj) {
-  return Object.entries(obj).map(x => String(x[0]) + ': ' + String(x[1])).join('<br>')
+  return Object.entries(obj).map(x => String(x[0]) + ': ' + x[1].map(y => '(' + String(y) + ')').join('; ')).join('<br>')
 }
 
 function findWords() { // Called by button
