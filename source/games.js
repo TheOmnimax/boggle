@@ -10,7 +10,7 @@ class SquareBoard {
 class BoardSpace {
   constructor(spaceId, piece) {
     this.connectedSpaces = []
-    this.spaceId = spaceId
+    this.id = spaceId
     if (piece != null) {
       this.assignPiece(piece)
     }
@@ -29,6 +29,11 @@ class BoardSpace {
 
   assignPiece(piece) {
     this.name = piece
+  }
+
+  assignCoord(row, col) {
+    this.row = row
+    this.col = col
   }
 }
 

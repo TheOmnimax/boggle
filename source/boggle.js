@@ -62,7 +62,7 @@ var timeRemaining
 
 var foundWords = {}
 var rejectedWords = {}
-var allWords = [] // Will eventually store all words that could have been used
+var allWords // Will eventually store all words that could have been used
 
 button4.onclick = function () {
   startGame(4, 4)
@@ -95,7 +95,9 @@ setTimeButton.onclick = function () {
 }
 findButton.onclick = findWords
 document.querySelector('#show-all').onclick = function () {
-  if (boggleBoard.allWords.length === 0) {
+  if (boggleBoard == null) {
+    showPopup('I mean, there\'s no board yet, so...', 'Huh?')
+  } else if (Object.keys(boggleBoard.allWords).length === 0) {
     let button1 = getCloseButton(closeText = 'Oh, alright.')
     showPopup('The word list is still being built. Please wait a few more seconds.', 'Still working', button1)
   } else {
@@ -105,7 +107,8 @@ document.querySelector('#show-all').onclick = function () {
     button2.appendChild(document.createTextNode('Yes'))
     button2.onclick = function () {
       closePopup()
-      showAllContainer.innerHTML = boggleBoard.allWords.join('<br>')
+      allWords = boggleBoard.allWords
+      showAllContainer.innerHTML = Object.keys(allWords).join('<br>')
     }
   
     showPopup('Are you sure you would like to show all possible words on this board?', 'Show all words', [button1, button2])
@@ -256,6 +259,13 @@ function timer () {
       showPopup('Time\'s up, pencils down! Click the button to check your answers.', 'Time\'s up!', button1)
     }
   }
+
+  
+  if ((allWords == null) && (boggleBoard != null)) {
+    if (Object.keys(boggleBoard.allWords).length > 0) {
+      allWords = boggleBoard.allWords
+    }
+  }
 }
 
 function getCloseButton(closeText = 'Close') {
@@ -269,8 +279,8 @@ function closePopup() {
   popupModule.style.display = 'none'
 }
 
-function showPopup(popupText, header = 'Warning', buttons = []/* ...doFunctions*/) {
-  if (buttons === []) {
+function showPopup (popupText, header = 'Warning', buttons = []) {
+  if (buttons.length === 0) {
     let button = document.createElement('button')
     button.appendChild(document.createTextNode('Close'))
     button.onclick = closePopup
@@ -292,120 +302,10 @@ function showPopup(popupText, header = 'Warning', buttons = []/* ...doFunctions*
 }
 
 function checkWord(word) {
-  word = word.toUpperCase()
-  var startLetter = word[0]
-  let qAdd = 0
-  if (startLetter === 'Q') {
-    if (word[1] === 'U') {
-      startLetter = 'Qu'
-      qAdd = 1
-    } else {
-      return false
-    }
-  }
-  let numRows = tableData.height
-  let numCols = tableData.width
-
-  for (let r = 0; r < numRows; r++) {
-    for (let c = 0; c < numCols; c++) {
-      let workingLetter = letterTable[r][c]
-      if (workingLetter === startLetter) {
-        let foundSet = findNextLetter(r, c, word.substr(1 + qAdd), [[r, c]])
-        if (foundSet !== false) {
-          return foundSet
-        }
-      }
-    }
-  }
-  return false
-
-  function checkLetter(row, col, remaining, usedC) {
-    console.log('At (' + String(row) + ',' + String(col) + ')')
-    if (usedC.nestedIncludes([row, col])) {
-      console.log('Used already')
-      return false
-    }
-
-    if ((row < 0) || (col < 0) || (row >= tableData.width) || (col >= tableData.height)) {
-      console.log('Out of range')
-      return false
-    }
-    var findLetter = remaining[0]
-    console.log('Looking for:', findLetter)
-    let checkLetter = letterTable[row][col]
-    console.log('Checking against:', checkLetter)
-    if (findLetter === checkLetter) {
-      console.log('Match!')
-      let newUC = [...usedC]
-      newUC.push([row, col])
-      console.log('New list:', newUC)
-      return findNextLetter(row, col, remaining.substr(1), newUC)
-    } else if (remaining.substr(0, 2) === checkLetter.toUpperCase()) { // For Qu
-      let newUC = [...usedC]
-      newUC.push([row, col])
-      console.log('New list:', newUC)
-      return findNextLetter(row, col, remaining.substr(2), newUC)
-
-    }
-    return false
-  }
-
-  function findNextLetter(row, col, remaining, usedCoord) {
-    if (remaining === '') {
-      return usedCoord
-    }
-
-    let checkReturn
-
-    checkReturn = checkLetter(row - 1, col - 1, remaining, usedCoord)
-    if (checkReturn !== false) return checkReturn
-
-    checkReturn = checkLetter(row - 1, col, remaining, usedCoord)
-    if (checkReturn !== false) return checkReturn
-
-    checkReturn = checkLetter(row - 1, col + 1, remaining, usedCoord)
-    if (checkReturn !== false) return checkReturn
-
-    checkReturn = checkLetter(row, col - 1, remaining, usedCoord)
-    if (checkReturn !== false) return checkReturn
-
-    checkReturn = checkLetter(row, col + 1, remaining, usedCoord)
-    if (checkReturn !== false) return checkReturn
-
-    checkReturn = checkLetter(row + 1, col - 1, remaining, usedCoord)
-    if (checkReturn !== false) return checkReturn
-
-    checkReturn = checkLetter(row + 1, col, remaining, usedCoord)
-    if (checkReturn !== false) return checkReturn
-
-    checkReturn = checkLetter(row + 1, col + 1, remaining, usedCoord)
-    if (checkReturn !== false) return checkReturn
-
-    /*if (checkLetter(row - 1, col - 1, remaining, usedCoord)) {
-      return true
-    }
-    if (checkLetter(row - 1, col, remaining, usedCoord)) {
-      return true
-    }
-    if (checkLetter(row - 1, col + 1, remaining, usedCoord)) {
-      return true
-    }
-    if (checkLetter(row, col - 1, remaining, usedCoord)) {
-      return true
-    }
-    if (checkLetter(row, col + 1, remaining, usedCoord)) {
-      return true
-    }
-    if (checkLetter(row + 1, col - 1, remaining, usedCoord)) {
-      return true
-    }
-    if (checkLetter(row + 1, col, remaining, usedCoord)) {
-      return true
-    }
-    if (checkLetter(row + 1, col + 1, remaining, usedCoord)) {
-      return true
-    }*/
-    return false
+  if (word in allWords) {
+    return allWords[word]
+  } else {
+    return []
   }
 }
 
@@ -414,27 +314,31 @@ function createLbList(obj) {
 }
 
 function findWords() { // Called by button
-  let rawWordData = wordInput.value
-  let wordList = rawWordData.split(/[, ]+/g)
-  for (let word of wordList) {
-    let coord = checkWord(word)
-    if (coord === false) {
-      if (!(word in rejectedWords)) {
-        rejectedWords[word] = 'Not found'
-      }
-    } else if (!checkWordExists(word)) {
-      if (!(word in rejectedWords)) {
-        rejectedWords[word] = 'Does not exist'
-      }
-    } else {
-      if (!(word in foundWords)) {
-        foundWords[word] = coord
+  if (allWords == null) {
+    showPopup('Still loading the word list. Please wait...', 'Still loading')
+  } else {
+    let rawWordData = wordInput.value
+    let wordList = rawWordData.split(/[, ]+/g)
+    for (let word of wordList) {
+      let coord = checkWord(word)
+      if (!checkWordExists(word)) {
+        if (!(word in rejectedWords)) {
+          rejectedWords[word] = 'Does not exist'
+        }
+      } else if (coord.length === 0) {
+        if (!(word in rejectedWords)) {
+          rejectedWords[word] = 'Not found'
+        }
+      } else {
+        if (!(word in foundWords)) {
+          foundWords[word] = coord
+        }
       }
     }
+  
+    foundContainer.innerHTML = createLbList(foundWords)
+    rejectedContainer.innerHTML = createLbList(rejectedWords)
   }
-
-  foundContainer.innerHTML = createLbList(foundWords)
-  rejectedContainer.innerHTML = createLbList(rejectedWords)
 }
 
 function checkWordExists(word) {

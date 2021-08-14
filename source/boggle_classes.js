@@ -1,6 +1,7 @@
 class BoggleBoard extends SquareBoard {
   constructor(width, height) {
     super(width, height)
+    this.allWords = new Object()
   }
 
   rollDice () {
@@ -10,7 +11,9 @@ class BoggleBoard extends SquareBoard {
     for (let r = 0; r < this.height; r++) {
       let row = []
       for (let c = 0; c < this.width; c++) {
-        row[c] = new BoardSpace(spaceId, this.letterList[spaceId])
+        let newSpace = new BoardSpace(spaceId, this.letterList[spaceId])
+        newSpace.assignCoord(r, c)
+        row[c] = newSpace
         spaceId++
       }
       this.board[r] = row
@@ -52,11 +55,9 @@ class BoggleBoard extends SquareBoard {
   } // End connectSpaces
 
   findAllWords (wordDict, wordList) {
-    this.allWords = []
     const wfWorker = new Worker('find_words.js')
     wfWorker.postMessage([this.board, wordDict, wordList])
     let scope = this
-
     wfWorker.onmessage = function (e) {
       scope.allWords = e.data
 
