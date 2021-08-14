@@ -121,6 +121,7 @@ wordInput.addEventListener('input', function (e) {
   if ((inputType === 'insertLineBreak') || ((e.data == null) && (inputType === 'insertText'))) {
     wordInput.value = wordInput.value.replace('\n', '')
     findWords()
+    wordInput.value = ''
     wordInput.focus()
   }
 })
