@@ -99,6 +99,10 @@ table#boggle-table td {
   height: 100px;
 }
 
+p.word {
+  margin: 0px 0 1px 0;
+}
+
 /* textarea#enter-words{
   width: 100%;
 

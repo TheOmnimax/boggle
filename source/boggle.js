@@ -110,8 +110,11 @@ showWordsButton.onclick = function () {
     button2.appendChild(document.createTextNode('Yes'))
     button2.onclick = function () {
       closePopup()
-      allWords = boggleBoard.allWords
-      showAllContainer.innerHTML = Object.keys(allWords).join('<br>')
+      showWordsButton.style.display = 'none'
+      let wordElements = createFoundDisp(allWords)
+      for (let e of wordElements) {
+        showAllContainer.appendChild(e)
+      }
     }
 
     showPopup('Are you sure you would like to show all possible words on this board?', 'Show all words', [button1, button2])
@@ -303,7 +306,18 @@ function checkWord (word) {
 }
 
 function createFoundDisp (obj) {
-  return Object.entries(obj).map(x => String(x[0]) + ': ' + x[1].map(y => '(' + String(y) + ')').join('; ')).join('<br>')
+  let elementList = []
+  for (let key in obj) {
+    let wordP = document.createElement('p')
+    wordP.classList.add('word')
+    wordP.appendChild(document.createTextNode(key))
+    wordP.onclick = function () {
+      boggleBoard.highlightCells(obj[key])
+    }
+    elementList.push(wordP)
+  }
+  return elementList
+  // return Object.entries(obj).map(x => String(x[0]) + ': ' + x[1].map(y => '(' + String(y) + ')').join('; ')).join('<br>')
 }
 
 function createRejectedDisp (obj) {
@@ -333,7 +347,12 @@ function findWords () { // Called by button
       }
     }
 
-    foundContainer.innerHTML = createFoundDisp(foundWords)
+    foundContainer.innerHTML = ''
+    let foundList = createFoundDisp(foundWords)
+    for (let f of foundList) {
+      foundContainer.appendChild(f)
+    }
+
     rejectedContainer.innerHTML = createRejectedDisp(rejectedWords)
   }
 }
