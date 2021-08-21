@@ -9,20 +9,44 @@ class SquareBoard {
   createBoard () {
     let boardTable = document.createElement('table')
     let boxNum = 0
+    this.cellGrid = []
+    this.cellList = []
     for (let h = 0; h < this.height; h++) {
       let rowElement = document.createElement('tr')
       for (let w = 0; w < this.width; w++) {
         let cellElement = document.createElement('td')
         cellElement.setAttribute('id', boxNum.toString())
         cellElement.classList.add('table-cell')
-        cellElement.appendChild(document.createTextNode(String.fromCharCode(11044)))
+        // cellElement.appendChild(document.createTextNode(String.fromCharCode(11044)))
         rowElement.appendChild(cellElement)
         boxNum++
+        this.cellList.push(cellElement)
       }
       boardTable.appendChild(rowElement)
+      let rowCells = rowElement.querySelectorAll('td')
+      this.cellGrid.push(rowCells)
     }
+
     return boardTable
   }
+
+  highlightCell (coord, className = 'highlight') {
+    this.cellGrid[coord[0]][coord[1]].classList.add(className)
+  }
+
+  dehighlightAll (className = 'highlight') {
+    for (let cell of this.cellList) {
+      cell.classList.remove(className)
+    }
+  }
+
+  highlightCells (coords, className = 'highlight') {
+    this.dehighlightAll()
+    for (let coord of coords) {
+      this.highlightCell(coord, className)
+    }
+  }
+
 }
 
 class BoardSpace {

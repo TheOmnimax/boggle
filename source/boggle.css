@@ -69,6 +69,10 @@ table#boggle-table td {
   width: 80px;
 }
 
+.highlight {
+  background-color: #69b87e;
+}
+
 /* ============================== */
 
 /* RIGHT COLUMN, RESULTS COLUMN */

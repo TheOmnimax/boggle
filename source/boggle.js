@@ -192,6 +192,7 @@ function createTable (width, height) {
 
   boggleTable = boggleBoard.createBoard()
   boggleTableContainer.appendChild(boggleTable)
+  hideLetters()
 
   startButton.style.display = 'inline'
 }
@@ -344,6 +345,11 @@ function checkWordExists (word) {
     return false
   }
 }
+
+// function highlightLetters () {
+//   let table = boggleBoard.
+//   highlight
+// }
 
 // Should update later for more nested, but not needed for this project
 Array.prototype.nestedIncludes = function (checkArray) {
