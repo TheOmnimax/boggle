@@ -117,6 +117,23 @@ class DiceBag { // Bag of dice. Arguments should be a series of Dice objects, or
   }
 }
 
+
+class Player {
+  constructor (id) {
+    this.id = id
+    this.score = 0
+  }
+
+  setName (name) {
+    this.name = name
+  }
+
+  addScore (add) {
+    this.score += add
+  }
+}
+
+
 function shuffle(array) {
   let arrayLength = array.length
   for (let s = 0; s < arrayLength; s++) {
