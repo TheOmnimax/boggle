@@ -86,7 +86,9 @@ class BoggleDice extends Dice { // Single die for Boggle
   static boggleDice = ['AAEEGN', 'ABBJOO', 'ACHOPS', 'AFFKPS',
     'AOOTTW', 'CIMOTU', 'DEILRX', 'DELRVY',
     'DISTTY', 'EEGHNW', 'EEINSU', 'EHRTVW',
-    'EIOSST', 'ELRTTY', 'HIMNQU', 'HLNNRZ'] // https://stanford.edu/class/archive/cs/cs106x/cs106x.1132/handouts/17-Assignment-3-Boggle.pdf
+    'EIOSST', 'ELRTTY',
+    ['H', 'I', 'M', 'N', 'Qu', 'U'],
+    'HLNNRZ'] // https://stanford.edu/class/archive/cs/cs106x/cs106x.1132/handouts/17-Assignment-3-Boggle.pdf
 
   constructor(diceNum) {
     super(BoggleDice.boggleDice[diceNum])
