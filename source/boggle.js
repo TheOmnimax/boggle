@@ -139,58 +139,21 @@ function setTime () {
   startTime = timeRemaining * 1000
 }
 
-function shuffleDice () {
-  var theseDice = availableDice
-  for (let d = 0; d < 16; d++) {
-    let rand16 = Math.floor(Math.random() * 16)
-    let dice1 = theseDice[d]
-    let dice2 = theseDice[rand16]
-    theseDice[rand16] = dice1
-    theseDice[d] = dice2
-  }
-  return theseDice
-}
-
-function getLetters (numLetters) {
-  var dice = []
-  var lettersNeeded = numLetters
-  var letters = []
-  while (lettersNeeded >= 16) {
-    dice = dice.concat(shuffleDice())
-    lettersNeeded -= 16
-  }
-  var otherDice = shuffleDice().slice(0, lettersNeeded)
-  dice = dice.concat(otherDice)
-  for (cube of dice) {
-    var rand6 = Math.floor(Math.random() * 6)
-    var addLetter = cube[rand6]
-    if (addLetter === 'Q') addLetter = 'Qu'
-    letters.push(addLetter)
-  }
-  return letters
-}
-
 function startGame (width, height) {
   boggleBoard = new BoggleBoard(width, height)
-  createTable(width, height)
+  createTable()
   findButton.innerText = 'Working...'
   showWordsButton.innerText = 'Working...'
 }
 
-function createTable (width, height) {
+function createTable () {
   boggleBoard.rollDice()
   boggleBoard.connectSpaces()
   boggleBoard.findAllWords(wordDict, wordList)
 
-  tableData.width = width
-  tableData.height = height
-
   buttonContainer.style.display = 'none'
   boggleContainer.style.display = 'inline'
-  boggleTableContainer.innerHTML = ''
-
-  var letters = getLetters(width * height)
-  tableData.letters = letters
+  removeAllChildNodes(boggleTableContainer)
 
   boggleTable = boggleBoard.createBoard()
   boggleTableContainer.appendChild(boggleTable)
@@ -316,7 +279,6 @@ function createFoundDisp (obj) {
     elementList.push(wordP)
   }
   return elementList
-  // return Object.entries(obj).map(x => String(x[0]) + ': ' + x[1].map(y => '(' + String(y) + ')').join('; ')).join('<br>')
 }
 
 function createRejectedDisp (obj) {
@@ -350,7 +312,7 @@ function findWords () { // Called by button
         }
       }
     }
-
+    
     foundContainer.innerHTML = ''
     let foundList = createFoundDisp(foundWords)
     for (let f of foundList) {
@@ -370,11 +332,6 @@ function checkWordExists (word) {
     return false
   }
 }
-
-// function highlightLetters () {
-//   let table = boggleBoard.
-//   highlight
-// }
 
 // Should update later for more nested, but not needed for this project
 Array.prototype.nestedIncludes = function (checkArray) {
