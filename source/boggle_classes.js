@@ -4,7 +4,7 @@ class BoggleBoard extends SquareBoard {
     this.allWords = new Object()
   }
 
-  static scoreWord(word) {
+  static scoreWord (word) {
     let wordLength = word.length
     if (wordLength < 3) {
       return 0
@@ -60,11 +60,11 @@ class BoggleBoard extends SquareBoard {
 
         if (r < this.height - 1) {
           if (c > 0) {
-            boardSpace.connectSpace(this.board[r+1][c-1])
+            boardSpace.connectSpace(this.board[r + 1][c - 1])
           }
-          boardSpace.connectSpace(this.board[r+1][c])
+          boardSpace.connectSpace(this.board[r + 1][c])
           if (c < this.width - 1) {
-            boardSpace.connectSpace(this.board[r+1][c+1])
+            boardSpace.connectSpace(this.board[r + 1][c + 1])
           }
         }
       } // End cycle through each cell in row
@@ -102,12 +102,12 @@ class BoggleBag extends DiceBag {
     this.addDice(...BoggleBag.getRandDice(numDice))
   }
 
-  pourDice() {
+  pourDice () {
     this.shuffleDice()
     return this.rollDice()
   }
 
-  static getSixteenDice() {
+  static getSixteenDice () {
     let diceList = []
     for (let d = 0; d < 16; d++) {
       diceList.push(new BoggleDice(d))
@@ -115,7 +115,7 @@ class BoggleBag extends DiceBag {
     return diceList
   }
 
-  static getRandDice(numDice) { // For fewer than 16 dice, use this to generate the additionally needed dice
+  static getRandDice (numDice) { // For fewer than 16 dice, use this to generate the additionally needed dice
     let randInt = shuffle(generateNumArray(16)).slice(0, numDice)
     let diceList = []
     for (let d = 0; d < numDice; d++) {
@@ -126,7 +126,7 @@ class BoggleBag extends DiceBag {
 }
 
 class BogglePlayer extends Player {
-  constructor (id) {
+  constructor(id) {
     super(id)
   }
 
@@ -134,7 +134,7 @@ class BogglePlayer extends Player {
     this.addScore(BoggleBoard.scoreWord(word))
   }
 
-  addWords(words) {
+  addWords (words) {
     for (let word of words) {
       this.addScore(BoggleBoard.scoreWord(word))
     }

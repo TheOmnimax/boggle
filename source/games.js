@@ -16,7 +16,7 @@ class BoardSpace {
     }
   }
 
-  connectSpace() { // Add space that is connected, to find which ones are adjacent
+  connectSpace () { // Add space that is connected, to find which ones are adjacent
     let numArgs = arguments.length
     for (let a = 0; a < numArgs; a++) {
       let arg = arguments[a]
@@ -27,11 +27,11 @@ class BoardSpace {
     }
   } // End connectSpace
 
-  assignPiece(piece) {
+  assignPiece (piece) {
     this.name = piece
   }
 
-  assignCoord(row, col) {
+  assignCoord (row, col) {
     this.row = row
     this.col = col
   }
@@ -71,7 +71,7 @@ class Dice {
     this.numSides = sides.length
   }
 
-  roll() {
+  roll () {
     let sideNum = Math.floor(Math.random() * this.numSides)
     this.upSide = this.sides[sideNum]
     return this.upSide
@@ -89,13 +89,13 @@ class NumDice extends Dice { // Standard, numbered die
 }
 
 class DiceBag { // Bag of dice. Arguments should be a series of Dice objects, or an object with a class that extends that
-  constructor () {
+  constructor() {
     this.allDice = []
     if (arguments.length > 0) {
       this.addDice(arguments)
     }
   }
-  addDice() {
+  addDice () {
     let numArgs = arguments.length
     for (let a = 0; a < numArgs; a++) {
       this.allDice.push(arguments[a])
@@ -103,12 +103,12 @@ class DiceBag { // Bag of dice. Arguments should be a series of Dice objects, or
     this.numDice = this.allDice.length
   }
 
-  shuffleDice() { // Change the order of the dice, in case the order needs to be shuffled
+  shuffleDice () { // Change the order of the dice, in case the order needs to be shuffled
     this.allDice = shuffle(this.allDice)
     return this.allDice
   }
 
-  rollDice() { // Roll all dice in the bag
+  rollDice () { // Roll all dice in the bag
     let rolledDice = []
     for (let dice of this.allDice) {
       rolledDice.push(dice.roll())
@@ -119,7 +119,7 @@ class DiceBag { // Bag of dice. Arguments should be a series of Dice objects, or
 
 
 class Player {
-  constructor (id) {
+  constructor(id) {
     this.id = id
     this.score = 0
   }
@@ -134,24 +134,24 @@ class Player {
 }
 
 
-function shuffle(array) {
+function shuffle (array) {
   let arrayLength = array.length
   for (let s = 0; s < arrayLength; s++) {
     let shufflePos = Math.floor(Math.random() * arrayLength)
     array = swapPos(array, s, shufflePos)
-    
+
   }
   return array
 }
 
-function swapPos(array, pos1, pos2) {
+function swapPos (array, pos1, pos2) {
   let curPiece = array[pos1]
   array[pos1] = array[pos2]
   array[pos2] = curPiece
   return array
 }
 
-function generateNumArray(size) {
+function generateNumArray (size) {
   if (size == null) {
     throw 'No size given!'
   }

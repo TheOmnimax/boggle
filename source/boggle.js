@@ -112,10 +112,10 @@ showWordsButton.onclick = function () {
       allWords = boggleBoard.allWords
       showAllContainer.innerHTML = Object.keys(allWords).join('<br>')
     }
-  
+
     showPopup('Are you sure you would like to show all possible words on this board?', 'Show all words', [button1, button2])
   }
-  
+
 }
 
 wordInput.addEventListener('input', function (e) {
@@ -131,13 +131,13 @@ wordInput.addEventListener('input', function (e) {
 setTime()
 setInterval(timer, 1)
 
-function setTime() {
+function setTime () {
   timeRemaining = timeInput.value
   timeLeftContainer.innerHTML = timeRemaining
   startTime = timeRemaining * 1000
 }
 
-function shuffleDice() {
+function shuffleDice () {
   var theseDice = availableDice
   for (let d = 0; d < 16; d++) {
     let rand16 = Math.floor(Math.random() * 16)
@@ -149,7 +149,7 @@ function shuffleDice() {
   return theseDice
 }
 
-function getLetters(numLetters) {
+function getLetters (numLetters) {
   var dice = []
   var lettersNeeded = numLetters
   var letters = []
@@ -168,13 +168,13 @@ function getLetters(numLetters) {
   return letters
 }
 
-function startGame(width, height) {
+function startGame (width, height) {
   boggleBoard = new BoggleBoard(width, height)
   createTable(width, height)
   showWordsButton.innerText = 'Working...'
 }
 
-function createTable(width, height) {
+function createTable (width, height) {
   boggleBoard.rollDice()
   boggleBoard.connectSpaces()
   boggleBoard.findAllWords(wordDict, wordList)
@@ -209,7 +209,7 @@ function createTable(width, height) {
   startButton.style.display = 'inline'
 }
 
-function startPauseGame() {
+function startPauseGame () {
   if (gameRunning) {
     gameRunning = false
     startTime = timeRemaining
@@ -223,7 +223,7 @@ function startPauseGame() {
   }
 }
 
-function showLetters() {
+function showLetters () {
   var allCells = document.querySelectorAll('.table-cell')
   var letters = boggleBoard.letterList
   var numLetters = letters.length
@@ -234,7 +234,7 @@ function showLetters() {
   }
 }
 
-function hideLetters() {
+function hideLetters () {
   var allCells = document.querySelectorAll('.table-cell')
   var numCells = allCells.length
   for (var c = 0; c < numCells; c++) {
@@ -264,7 +264,7 @@ function timer () {
     }
   }
 
-  
+
   if ((allWords == null) && (boggleBoard != null)) {
     if (Object.keys(boggleBoard.allWords).length > 0) {
       allWords = boggleBoard.allWords
@@ -273,14 +273,14 @@ function timer () {
   }
 }
 
-function getCloseButton(closeText = 'Close') {
+function getCloseButton (closeText = 'Close') {
   let closeButton = document.createElement('button')
   closeButton.appendChild(document.createTextNode(closeText))
   closeButton.onclick = closePopup
   return closeButton
 }
 
-function closePopup() {
+function closePopup () {
   popupModule.style.display = 'none'
 }
 
@@ -306,7 +306,7 @@ function showPopup (popupText, header = 'Warning', buttons = []) {
   popupHeaderContainer.innerText = header
 }
 
-function checkWord(word) {
+function checkWord (word) {
   if (word in allWords) {
     return allWords[word]
   } else {
@@ -314,11 +314,11 @@ function checkWord(word) {
   }
 }
 
-function createLbList(obj) {
+function createLbList (obj) {
   return Object.entries(obj).map(x => String(x[0]) + ': ' + x[1].map(y => '(' + String(y) + ')').join('; ')).join('<br>')
 }
 
-function findWords() { // Called by button
+function findWords () { // Called by button
   if (allWords == null) {
     showPopup('Still loading the word list. Please wait...', 'Still loading')
   } else {
@@ -340,13 +340,13 @@ function findWords() { // Called by button
         }
       }
     }
-  
+
     foundContainer.innerHTML = createLbList(foundWords)
     rejectedContainer.innerHTML = createLbList(rejectedWords)
   }
 }
 
-function checkWordExists(word) {
+function checkWordExists (word) {
   if (wordDict[word]) {
     return true
   } else {
@@ -378,7 +378,7 @@ Array.prototype.nestedIncludes = function (checkArray) {
   }
 }
 
-function removeAllChildNodes(parent) {
+function removeAllChildNodes (parent) {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
   }
