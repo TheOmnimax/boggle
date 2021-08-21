@@ -312,8 +312,8 @@ function findWords () { // Called by button
         }
       }
     }
-    
-    foundContainer.innerHTML = ''
+
+    removeAllChildNodes(foundContainer)
     let foundList = createFoundDisp(foundWords)
     for (let f of foundList) {
       foundContainer.appendChild(f)
