@@ -24,6 +24,8 @@ const foundContainer = document.querySelector('#found-list')
 const rejectedContainer = document.querySelector('#rejected-list')
 const showAllContainer = document.querySelector('#all-list')
 
+const showWordsButton = document.querySelector('#show-all')
+
 const wordInput = document.querySelector('#enter-words')
 const findButton = document.querySelector('#find-words')
 
@@ -94,7 +96,7 @@ setTimeButton.onclick = function () {
   }
 }
 findButton.onclick = findWords
-document.querySelector('#show-all').onclick = function () {
+showWordsButton.onclick = function () {
   if (boggleBoard == null) {
     showPopup('I mean, there\'s no board yet, so...', 'Huh?')
   } else if (Object.keys(boggleBoard.allWords).length === 0) {
@@ -169,6 +171,7 @@ function getLetters(numLetters) {
 function startGame(width, height) {
   boggleBoard = new BoggleBoard(width, height)
   createTable(width, height)
+  showWordsButton.innerText = 'Working...'
 }
 
 function createTable(width, height) {
@@ -265,6 +268,7 @@ function timer () {
   if ((allWords == null) && (boggleBoard != null)) {
     if (Object.keys(boggleBoard.allWords).length > 0) {
       allWords = boggleBoard.allWords
+      showWordsButton.innerText = 'Show all'
     }
   }
 }
