@@ -5,6 +5,24 @@ class SquareBoard {
     this.height = height
     this.board = [[]]
   }
+
+  createBoard () {
+    let boardTable = document.createElement('table')
+    let boxNum = 0
+    for (let h = 0; h < this.height; h++) {
+      let rowElement = document.createElement('tr')
+      for (let w = 0; w < this.width; w++) {
+        let cellElement = document.createElement('td')
+        cellElement.setAttribute('id', boxNum.toString())
+        cellElement.classList.add('table-cell')
+        cellElement.appendChild(document.createTextNode(String.fromCharCode(11044)))
+        rowElement.appendChild(cellElement)
+        boxNum++
+      }
+      boardTable.appendChild(rowElement)
+    }
+    return boardTable
+  }
 }
 
 class BoardSpace {

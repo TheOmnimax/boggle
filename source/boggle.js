@@ -7,7 +7,7 @@ const other1 = buttonContainer.querySelector('#other1')
 const other2 = buttonContainer.querySelector('#other2')
 const gameBoard = document.querySelector('#game-board')
 const boggleContainer = gameBoard.querySelector('#boggle-container')
-const boggleTable = boggleContainer.querySelector('#boggle-table')
+const boggleTableContainer = boggleContainer.querySelector('#boggle-table')
 const startButton = gameBoard.querySelector('#start-button')
 const timeInput = document.querySelector('#time-input')
 const timeLeftContainer = document.querySelector('#time-left')
@@ -30,6 +30,7 @@ const wordInput = document.querySelector('#enter-words')
 const findButton = document.querySelector('#find-words')
 
 var boggleBoard
+var boggleTable
 
 const availableDice = ['AAEEGN', 'ABBJOO', 'ACHOPS', 'AFFKPS',
   'AOOTTW', 'CIMOTU', 'DEILRX', 'DELRVY',
@@ -184,28 +185,14 @@ function createTable (width, height) {
 
   buttonContainer.style.display = 'none'
   boggleContainer.style.display = 'inline'
-  boggleTable.innerHTML = ''
+  boggleTableContainer.innerHTML = ''
 
   var letters = getLetters(width * height)
   tableData.letters = letters
 
-  var boxNum = 0
-  for (let h = 0; h < height; h++) {
-    let rowElement = document.createElement('tr')
+  boggleTable = boggleBoard.createBoard()
+  boggleTableContainer.appendChild(boggleTable)
 
-    let letterRow = []
-    for (let w = 0; w < width; w++) {
-      let cellElement = document.createElement('td')
-      cellElement.setAttribute('id', boxNum.toString())
-      cellElement.classList.add('table-cell')
-      cellElement.appendChild(document.createTextNode(String.fromCharCode(11044)))
-      rowElement.appendChild(cellElement)
-      letterRow[w] = letters[boxNum]
-      boxNum++
-    }
-    boggleTable.appendChild(rowElement)
-    letterTable[h] = letterRow
-  }
   startButton.style.display = 'inline'
 }
 
@@ -314,8 +301,12 @@ function checkWord (word) {
   }
 }
 
-function createLbList (obj) {
+function createFoundDisp (obj) {
   return Object.entries(obj).map(x => String(x[0]) + ': ' + x[1].map(y => '(' + String(y) + ')').join('; ')).join('<br>')
+}
+
+function createRejectedDisp (obj) {
+  return Object.entries(obj).map(x => String(x[0]) + ': ' + x[1]).join('<br>')
 }
 
 function findWords () { // Called by button
@@ -341,8 +332,8 @@ function findWords () { // Called by button
       }
     }
 
-    foundContainer.innerHTML = createLbList(foundWords)
-    rejectedContainer.innerHTML = createLbList(rejectedWords)
+    foundContainer.innerHTML = createFoundDisp(foundWords)
+    rejectedContainer.innerHTML = createRejectedDisp(rejectedWords)
   }
 }
 
