@@ -4,6 +4,23 @@ class BoggleBoard extends SquareBoard {
     this.allWords = new Object()
   }
 
+  static scoreWord(word) {
+    let wordLength = word.length
+    if (wordLength < 3) {
+      return 0
+    } else if (wordLength <= 4) {
+      return 1
+    } else if (wordLength === 5) {
+      return 2
+    } else if (wordLength === 6) {
+      return 3
+    } else if (wordLength === 7) {
+      return 5
+    } else {
+      return 11
+    }
+  }
+
   rollDice () {
     this.boggleBag = new BoggleBag(this.numSpaces)
     this.letterList = this.boggleBag.pourDice()
@@ -105,5 +122,21 @@ class BoggleBag extends DiceBag {
       diceList.push(new BoggleDice(randInt[d]))
     }
     return diceList
+  }
+}
+
+class BogglePlayer extends Player {
+  constructor (id) {
+    super(id)
+  }
+
+  addWord (word) {
+    this.addScore(BoggleBoard.scoreWord(word))
+  }
+
+  addWords(words) {
+    for (let word of words) {
+      this.addScore(BoggleBoard.scoreWord(word))
+    }
   }
 }
