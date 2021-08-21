@@ -127,8 +127,6 @@ wordInput.addEventListener('input', function (e) {
   if ((inputType === 'insertLineBreak') || ((e.data == null) && (inputType === 'insertText'))) {
     wordInput.value = wordInput.value.replace('\n', '')
     findWords()
-    wordInput.value = ''
-    wordInput.focus()
   }
 })
 
@@ -175,6 +173,7 @@ function getLetters (numLetters) {
 function startGame (width, height) {
   boggleBoard = new BoggleBoard(width, height)
   createTable(width, height)
+  findButton.innerText = 'Working...'
   showWordsButton.innerText = 'Working...'
 }
 
@@ -255,10 +254,10 @@ function timer () {
     }
   }
 
-
   if ((allWords == null) && (boggleBoard != null)) {
     if (Object.keys(boggleBoard.allWords).length > 0) {
       allWords = boggleBoard.allWords
+      findButton.innerText = 'Find'
       showWordsButton.innerText = 'Show all'
     }
   }
@@ -325,12 +324,17 @@ function createRejectedDisp (obj) {
 }
 
 function findWords () { // Called by button
-  if (allWords == null) {
+  if (boggleBoard == null) {
+    showPopup('I mean, there\'s no board yet, so you can\'t really find words yet.', 'No board yet')
+  } else if (allWords == null) {
     showPopup('Still loading the word list. Please wait...', 'Still loading')
   } else {
     let rawWordData = wordInput.value
     let wordList = rawWordData.split(/[, ]+/g)
     for (let word of wordList) {
+      if (word.length === 0) {
+        continue
+      }
       let coord = checkWord(word)
       if (!checkWordExists(word)) {
         if (!(word in rejectedWords)) {
@@ -355,6 +359,8 @@ function findWords () { // Called by button
 
     rejectedContainer.innerHTML = createRejectedDisp(rejectedWords)
   }
+  wordInput.value = ''
+  wordInput.focus()
 }
 
 function checkWordExists (word) {
