@@ -310,7 +310,7 @@ function createFoundDisp (obj) {
   for (let key in obj) {
     let wordP = document.createElement('p')
     wordP.classList.add('word')
-    wordP.appendChild(document.createTextNode(key))
+    wordP.appendChild(document.createTextNode(key + ': ' + String(BoggleBoard.scoreWord(key))))
     wordP.onclick = function () {
       boggleBoard.highlightCells(obj[key])
     }
