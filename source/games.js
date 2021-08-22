@@ -1,11 +1,22 @@
+/**
+ * Used to create a game board in a square, with a simple width and height.
+ */
 class SquareBoard {
+  /**
+   * @param {int} width Width of the board
+   * @param {int} height Height of the board
+  */
   constructor(width, height) {
     this.numSpaces = width * height
     this.width = width
     this.height = height
-    this.board = [[]]
+    this.board = [[]] // This will be a grid array, and each element will be of type BoardSpace
   }
 
+  /**
+   * Generates a "table" element that will be displayed in the HTML. Saved in "cellGrid" so their look can be changed in the class.
+   * @return {Element<table>}
+   */
   createBoard () {
     let boardTable = document.createElement('table')
     let boxNum = 0
@@ -17,7 +28,6 @@ class SquareBoard {
         let cellElement = document.createElement('td')
         cellElement.setAttribute('id', boxNum.toString())
         cellElement.classList.add('table-cell')
-        // cellElement.appendChild(document.createTextNode(String.fromCharCode(11044)))
         rowElement.appendChild(cellElement)
         boxNum++
         this.cellList.push(cellElement)
@@ -30,16 +40,29 @@ class SquareBoard {
     return boardTable
   }
 
+  /**
+   * Highlights a single cell in the table
+   * @param {Array<number>} coord Coordinates of the cell in the table that should be highlighted.
+   * @param {string} className Name of the class that should be applied.
+   */
   highlightCell (coord, className = 'highlight') {
     this.cellGrid[coord[0]][coord[1]].classList.add(className)
   }
 
+  /**
+   * Remove the highlighting of all the cells.
+   * @param {string} className Name of the class that should be applied.
+   */
   dehighlightAll (className = 'highlight') {
     for (let cell of this.cellList) {
       cell.classList.remove(className)
     }
   }
 
+  /**
+   * @param {Array<Array<number>>} coords Pairs of coordinates that should be highlighted
+   * @param {string} className Name of the class that should be applied.
+   */
   highlightCells (coords, className = 'highlight') {
     this.dehighlightAll()
     for (let coord of coords) {
@@ -49,6 +72,9 @@ class SquareBoard {
 
 }
 
+/**
+ * Represents a single space on the board.
+ */
 class BoardSpace {
   constructor(spaceId, piece) {
     this.connectedSpaces = []
