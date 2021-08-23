@@ -76,15 +76,22 @@ class SquareBoard {
  * Represents a single space on the board.
  */
 class BoardSpace {
+  /**
+   * @param {string} spaceId Unique identifier of the space
+   * @param {string} piece What is on that space.
+   */
   constructor(spaceId, piece) {
-    this.connectedSpaces = []
     this.id = spaceId
     if (piece != null) {
       this.assignPiece(piece)
     }
   }
 
-  connectSpace () { // Add space that is connected, to find which ones are adjacent
+  /**
+   * Add space that is connected, to find which ones are adjacent
+   */
+  connectSpace () { 
+    this.connectedSpaces = []
     let numArgs = arguments.length
     for (let a = 0; a < numArgs; a++) {
       let arg = arguments[a]
@@ -95,10 +102,20 @@ class BoardSpace {
     }
   } // End connectSpace
 
+  /**
+   * Give name to the space, so it is known what is on that space.
+   * (May add new method later for pieces sharing a space)
+   * @param {string} piece 
+   */
   assignPiece (piece) {
     this.name = piece
   }
 
+  /**
+   * Assign coordinates to that space, so it is known where it is located on the board.
+   * @param {number} row The row number of the coordinates, starting at 0.
+   * @param {number} col The column number of the coordinates, starting at 0
+   */
   assignCoord (row, col) {
     this.row = row
     this.col = col
