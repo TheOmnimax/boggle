@@ -82,6 +82,7 @@ class BoardSpace {
    */
   constructor(spaceId, piece) {
     this.id = spaceId
+    this.connectedSpaces = []
     if (piece != null) {
       this.assignPiece(piece)
     }
@@ -90,8 +91,7 @@ class BoardSpace {
   /**
    * Add space that is connected, to find which ones are adjacent
    */
-  connectSpace () { 
-    this.connectedSpaces = []
+  connectSpace () {
     let numArgs = arguments.length
     for (let a = 0; a < numArgs; a++) {
       let arg = arguments[a]
